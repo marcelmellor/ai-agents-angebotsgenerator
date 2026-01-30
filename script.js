@@ -1,11 +1,23 @@
 // Position Counter für eindeutige IDs
 let positionCounter = 4;
 
+// Eindeutige Vertragsnummer generieren (Hash aus Timestamp)
+function generateContractNumber() {
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 1000);
+    const hash = ((timestamp + random) % 10000000).toString().padStart(7, '0');
+    return 'B' + hash;
+}
+
 // Datum auf heute setzen beim Laden
 window.addEventListener('DOMContentLoaded', () => {
     const dateInput = document.getElementById('date');
     const today = new Date().toISOString().split('T')[0];
     dateInput.value = today;
+
+    // Vertragsnummer automatisch generieren
+    const contractNumberInput = document.getElementById('contract-number');
+    contractNumberInput.value = generateContractNumber();
 
     // Beispielangebot Button Handler
     const fillExampleBtn = document.getElementById('fill-example-btn');
@@ -136,7 +148,7 @@ function fillExampleData() {
     document.getElementById('location').value = 'Düsseldorf';
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('date').value = today;
-    document.getElementById('contract-number').value = 'B4316065';
+    document.getElementById('contract-number').value = generateContractNumber();
 
     // Angebotspositionen - Standard-Werte setzen
     const positionGroups = document.querySelectorAll('#positions-container .position-group');
