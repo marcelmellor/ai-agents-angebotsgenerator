@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sipgate AI Agents - Angebotsgenerator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Eingabeformular -->
+    <div id="form-container">
+        <div class="form-header">
+            <h1>sipgate AI Agents Angebotsgenerator</h1>
+            <p>Füllen Sie die Felder aus, um ein Angebot zu generieren</p>
+        </div>
+
+        <form id="offer-form">
+            <!-- Kundeninformationen -->
+            <section class="form-section">
+                <h2>Kundeninformationen</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="company">Firmenname *</label>
+                        <input type="text" id="company" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="salutation">Anrede *</label>
+                        <select id="salutation" required>
+                            <option value="Herr">Herr</option>
+                            <option value="Frau">Frau</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact">Ansprechpartner *</label>
+                        <input type="text" id="contact" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="street">Straße *</label>
+                        <input type="text" id="street" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="plz">PLZ *</label>
+                        <input type="text" id="plz" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">Ort *</label>
+                        <input type="text" id="city" required>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vertragsinformationen -->
+            <section class="form-section">
+                <h2>Vertragsinformationen</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="location">Ort *</label>
+                        <input type="text" id="location" value="Düsseldorf" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Datum *</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contract-number">Vertragsnummer *</label>
+                        <input type="text" id="contract-number" placeholder="B4316065" required>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Angebotspositionen -->
+            <section class="form-section">
+                <h2>Angebotspositionen</h2>
+
+                <div id="positions-container">
+                    <!-- Position 1: AI Agents Tarif (Hauptposition) -->
+                    <div class="position-group" data-position-id="1" data-is-main="true">
+                        <div class="position-header">
+                            <h3>AI Agents Enterprise Tarif</h3>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Anzahl Minutenkontingent *</label>
+                                <input type="number" class="position-quantity" value="2500" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Einzelpreis (€) *</label>
+                                <input type="number" class="position-price" value="449.95" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <input type="hidden" class="position-name" value="AI Agents Enterprise Tarif">
+                        <input type="hidden" class="position-description" value="{{minutes}} AI-Minuten inkludiert*|Natürliche Gesprächsführung|Mehrsprachigkeit|Auswahl an natürlich klingenden AI-Stimmen (20+ Stimmen)|Verzweigte Gesprächsleitfäden|Anrufszenarien (Playbooks)|Kontextwissen|Outbound-Anrufe|CRM/ERP-Integration">
+                    </div>
+
+                    <!-- Position 2: Unterstützte Einrichtung -->
+                    <div class="position-group" data-position-id="2">
+                        <div class="position-header">
+                            <h3>Unterstützte Einrichtung und Optimierung</h3>
+                            <button type="button" class="btn-remove-position" onclick="removePosition(this)" title="Position entfernen">&times;</button>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Anzahl *</label>
+                                <input type="number" class="position-quantity" value="1" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Einzelpreis (€) *</label>
+                                <input type="number" class="position-price" value="0" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <input type="hidden" class="position-name" value="Unterstützte Einrichtung und Optimierung">
+                        <input type="hidden" class="position-description" value="Onboarding und Erarbeitung eines &quot;Proof of Concept&quot; (PoC)|Bereitstellung und Produktübergabe|Bereitstellung eines Account Managers">
+                    </div>
+
+                    <!-- Position 3: Rufnummernblock -->
+                    <div class="position-group" data-position-id="3">
+                        <div class="position-header">
+                            <h3>neuer 3er Rufnummernblock</h3>
+                            <button type="button" class="btn-remove-position" onclick="removePosition(this)" title="Position entfernen">&times;</button>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Anzahl *</label>
+                                <input type="number" class="position-quantity" value="1" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Einzelpreis (€) *</label>
+                                <input type="number" class="position-price" value="4.95" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <input type="hidden" class="position-name" value="neuer 3er Rufnummernblock (optional)">
+                        <input type="hidden" class="position-description" value="">
+                    </div>
+
+                    <!-- Position 4: Portierung -->
+                    <div class="position-group" data-position-id="4">
+                        <div class="position-header">
+                            <h3>Portierung bestehender Rufnummern</h3>
+                            <button type="button" class="btn-remove-position" onclick="removePosition(this)" title="Position entfernen">&times;</button>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Anzahl *</label>
+                                <input type="number" class="position-quantity" value="1" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Einzelpreis (€) *</label>
+                                <input type="number" class="position-price" value="0" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <input type="hidden" class="position-name" value="Portierung bestehender Rufnummern (optional)">
+                        <input type="hidden" class="position-description" value="Unterstützung bei der Portierung von Rufnummern zu sipgate">
+                    </div>
+                </div>
+
+                <button type="button" class="btn-add-position" id="add-position-btn">+ Neue Position hinzufügen</button>
+            </section>
+
+            <!-- Vertragsbedingungen -->
+            <section class="form-section">
+                <h2>Vertragsbedingungen</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contract-start">Vertragsbeginn *</label>
+                        <input type="text" id="contract-start" value="mit Unterschrift" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-start">Abrechnungsbeginn *</label>
+                        <input type="text" id="billing-start" value="nach Ablauf des Testzeitraums" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="contract-term">Vertragslaufzeit *</label>
+                        <textarea id="contract-term" rows="3" required>zwölf (12) Monate – abweichend von den AGB läuft der Vertrag für ein (1) Jahr und verlängert sich automatisch um ein (1) weiteres Jahr, wenn er nicht mit einer Frist von 3 Monaten zum Ende des Vertragszeitraums in Textform gekündigt wurde.</textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="test-period">Testzeitraum *</label>
+                        <textarea id="test-period" rows="3" required>Das Produkt AI Agent kann innerhalb der ersten vier (4) Wochen ab Vertragsbeginn kostenfrei getestet werden. Während dieses Testzeitraums ist der Kunde berechtigt, ohne Angabe von Gründen vom Vertrag zurückzutreten. Der Abrechnungszeitraum beginnt erst nach Ablauf des Testzeitraums.</textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="billing-period">Abrechnungszeitraum *</label>
+                        <textarea id="billing-period" rows="2" required>Monatliche Abrechnung in Höhe des unter monatlich Netto genannten Betrages.</textarea>
+                    </div>
+                </div>
+            </section>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" id="fill-example-btn">Beispielangebot generieren</button>
+                <button type="submit" class="btn-primary">Angebot generieren</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Generiertes Angebot (versteckt, nur beim Drucken sichtbar) -->
+    <div id="offer-container" style="display: none;">
+        <!-- Seite 1: Deckblatt -->
+        <div class="page page-1">
+            <div class="header-box">
+                <div class="header-content">
+                    <div class="header-title">sipgate AI Agents</div>
+                    <div class="header-logo">
+                        <img src="https://cdn.prod.website-files.com/678900e941dcd8f65b4519f8/678900e941dcd8f65b451a42_sipgate_logo_black.svg" alt="sipgate" class="logo-img">
+                    </div>
+                </div>
+                <h1 class="main-heading">
+                    Stärken Sie Ihren<br>
+                    <strong>Kundenservice.</strong>
+                </h1>
+                <p class="subheading">
+                    Wir freuen uns, Ihnen den folgenden <strong>Enterprise Vertrag</strong> zu unterbreiten.
+                </p>
+            </div>
+
+            <div class="content-box">
+                <div class="address-section">
+                    <div class="address-left">
+                        <div id="output-company"></div>
+                        <div id="output-contact"></div>
+                        <div id="output-street"></div>
+                        <div>&nbsp;</div>
+                        <div id="output-plz-city"></div>
+                    </div>
+                    <div class="address-right">
+                        <div id="output-location-date"></div>
+                        <div>&nbsp;</div>
+                        <div><strong>Ihr Vertrag</strong></div>
+                        <div id="output-contract-number"></div>
+                    </div>
+                </div>
+
+                <div class="intro-text">
+                    <p id="output-salutation">Sehr geehrter Herr Mustermann,</p>
+                    <p>vielen Dank für Ihr Interesse an unseren sipgate AI Agents. In den folgenden Abschnitten finden Sie eine detaillierte Übersicht über unser Angebot sowie Informationen zu Preisen und weiteren wichtigen Informationen.</p>
+                    <p>Wir freuen uns auf eine erfolgreiche Zusammenarbeit!</p>
+                    <p>Ihr Team von sipgate</p>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="footer-col">
+                    <p>sipgate GmbH, Gladbacher Str. 74, 40219 Düsseldorf</p>
+                    <p>HRB 38841 Düsseldorf GF: Tim Mois, Thilo Salmon</p>
+                    <p>USt ID: DE257948491, Finanzamt Düsseldorf</p>
+                    <p>Steuer-Nr.: 106/5754/7147</p>
+                </div>
+                <div class="footer-col">
+                    <p>Bank: Commerzbank Düsseldorf</p>
+                    <p>IBAN: DE10 3004 0000 0381 1488 00</p>
+                    <p>BIC: COBADEFFXXX</p>
+                    <p>Gläubiger-ID: DE73ZZZ00001393294</p>
+                </div>
+                <div class="footer-col">
+                    <p>Telefon: 0211-63555661</p>
+                    <p>www.sipgate.de</p>
+                    <p>Support: team@support.sipgate.de</p>
+                </div>
+            </div>
+
+            <div class="page-number">1</div>
+        </div>
+
+        <!-- Seite 2: Angebot -->
+        <div class="page page-2">
+            <div class="page-header">
+                <h2>Unser Angebot</h2>
+                <div class="page-logo">
+                    <img src="https://cdn.prod.website-files.com/678900e941dcd8f65b4519f8/678900e941dcd8f65b451a42_sipgate_logo_black.svg" alt="sipgate" class="logo-img">
+                </div>
+            </div>
+
+            <table class="offer-table">
+                <thead>
+                    <tr>
+                        <th>Anzahl</th>
+                        <th>Tarife</th>
+                        <th>Einzelpreis</th>
+                        <th>Summe</th>
+                    </tr>
+                </thead>
+                <tbody id="offer-table-body">
+                    <!-- Positionen werden dynamisch generiert -->
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="3" class="total-label">Monatlich Netto (zzgl. MwSt.)</td>
+                        <td class="total-amount" id="total-amount">0,00 €</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="footer">
+                <div class="footer-col">
+                    <p>sipgate GmbH, Gladbacher Str. 74, 40219 Düsseldorf</p>
+                    <p>HRB 38841 Düsseldorf GF: Tim Mois, Thilo Salmon</p>
+                    <p>USt ID: DE257948491, Finanzamt Düsseldorf</p>
+                    <p>Steuer-Nr.: 106/5754/7147</p>
+                </div>
+                <div class="footer-col">
+                    <p>Bank: Commerzbank Düsseldorf</p>
+                    <p>IBAN: DE10 3004 0000 0381 1488 00</p>
+                    <p>BIC: COBADEFFXXX</p>
+                    <p>Gläubiger-ID: DE73ZZZ00001393294</p>
+                </div>
+                <div class="footer-col">
+                    <p>Telefon: 0211-63555661</p>
+                    <p>www.sipgate.de</p>
+                    <p>Support: team@support.sipgate.de</p>
+                </div>
+            </div>
+
+            <div class="page-number">2</div>
+        </div>
+
+        <!-- Seite 3: Konditionen -->
+        <div class="page page-3">
+            <div class="page-header">
+                <h2>Konditionen</h2>
+                <div class="page-logo">
+                    <img src="https://cdn.prod.website-files.com/678900e941dcd8f65b4519f8/678900e941dcd8f65b451a42_sipgate_logo_black.svg" alt="sipgate" class="logo-img">
+                </div>
+            </div>
+
+            <div class="conditions-box">
+                <p class="conditions-intro">
+                    Hiermit beauftragt <strong>der Kunde</strong> die sipgate GmbH mit der Erbringung der unter Grundtarif genannten Leistungen gemäß des Angebots vom <strong id="conditions-date">Datum</strong>.
+                </p>
+
+                <p><strong>Vertragsbeginn:</strong> <span id="conditions-start"></span></p>
+
+                <p><strong>Vertragslaufzeit:</strong> <span id="conditions-term"></span></p>
+
+                <p><strong>Testzeitraum:</strong> <span id="conditions-test"></span></p>
+
+                <p><strong>Abrechnungsbeginn:</strong> <span id="conditions-billing-start"></span></p>
+
+                <p><strong>Abrechnungszeitraum:</strong> <span id="conditions-billing"></span></p>
+
+                <div class="signature-line">
+                    <span>Datum, Unterschrift/Stempel Kunde</span>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="footer-col">
+                    <p>sipgate GmbH, Gladbacher Str. 74, 40219 Düsseldorf</p>
+                    <p>HRB 38841 Düsseldorf GF: Tim Mois, Thilo Salmon</p>
+                    <p>USt ID: DE257948491, Finanzamt Düsseldorf</p>
+                    <p>Steuer-Nr.: 106/5754/7147</p>
+                </div>
+                <div class="footer-col">
+                    <p>Bank: Commerzbank Düsseldorf</p>
+                    <p>IBAN: DE10 3004 0000 0381 1488 00</p>
+                    <p>BIC: COBADEFFXXX</p>
+                    <p>Gläubiger-ID: DE73ZZZ00001393294</p>
+                </div>
+                <div class="footer-col">
+                    <p>Telefon: 0211-63555661</p>
+                    <p>www.sipgate.de</p>
+                    <p>Support: team@support.sipgate.de</p>
+                </div>
+            </div>
+
+            <div class="page-number">3</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
