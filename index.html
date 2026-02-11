@@ -266,57 +266,8 @@
             <div class="page-number">1</div>
         </div>
 
-        <!-- Seite 2: Angebot -->
-        <div class="page page-2">
-            <div class="page-header">
-                <h2>Unser Angebot</h2>
-                <div class="page-logo">
-                    <img src="https://cdn.prod.website-files.com/678900e941dcd8f65b4519f8/678900e941dcd8f65b451a42_sipgate_logo_black.svg" alt="sipgate" class="logo-img">
-                </div>
-            </div>
-
-            <table class="offer-table">
-                <thead>
-                    <tr>
-                        <th>Anzahl</th>
-                        <th>Tarife</th>
-                        <th>Einzelpreis</th>
-                        <th>Summe</th>
-                    </tr>
-                </thead>
-                <tbody id="offer-table-body">
-                    <!-- Positionen werden dynamisch generiert -->
-                </tbody>
-                <tfoot>
-                    <tr class="total-row">
-                        <td colspan="3" class="total-label">Monatlich Netto (zzgl. MwSt.)</td>
-                        <td class="total-amount" id="total-amount">0,00 €</td>
-                    </tr>
-                </tfoot>
-            </table>
-
-            <div class="footer">
-                <div class="footer-col">
-                    <p>sipgate GmbH, Gladbacher Str. 74, 40219 Düsseldorf</p>
-                    <p>HRB 38841 Düsseldorf GF: Tim Mois, Thilo Salmon</p>
-                    <p>USt ID: DE257948491, Finanzamt Düsseldorf</p>
-                    <p>Steuer-Nr.: 106/5754/7147</p>
-                </div>
-                <div class="footer-col">
-                    <p>Bank: Commerzbank Düsseldorf</p>
-                    <p>IBAN: DE10 3004 0000 0381 1488 00</p>
-                    <p>BIC: COBADEFFXXX</p>
-                    <p>Gläubiger-ID: DE73ZZZ00001393294</p>
-                </div>
-                <div class="footer-col">
-                    <p>Telefon: 0211-63555661</p>
-                    <p>www.sipgate.de</p>
-                    <p>Support: team@support.sipgate.de</p>
-                </div>
-            </div>
-
-            <div class="page-number">2</div>
-        </div>
+        <!-- Seite 2+: Angebot (dynamisch generiert, mehrseitig) -->
+        <div id="offer-pages-container"></div>
 
         <!-- Seite 3: Konditionen -->
         <div class="page page-3">
@@ -367,7 +318,7 @@
                 </div>
             </div>
 
-            <div class="page-number">3</div>
+            <div class="page-number" id="conditions-page-number">3</div>
         </div>
     </div>
 

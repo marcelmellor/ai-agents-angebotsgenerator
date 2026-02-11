@@ -243,13 +243,30 @@ function generateOffer(data) {
     document.getElementById('output-location-date').textContent = `${data.location}, ${formattedDate}`;
     document.getElementById('output-contract-number').textContent = data.contractNumber;
 
-    // Seite 2: Angebot - Tabelle dynamisch generieren
-    const tableBody = document.getElementById('offer-table-body');
-    tableBody.innerHTML = '';
+    // Seite 2+: Angebot (dynamisch, mehrseitig)
+    generateOfferPages(data);
 
+    // Seite 3: Konditionen
+    document.getElementById('conditions-date').textContent = formattedDate;
+    document.getElementById('conditions-start').textContent = data.contractStart;
+    document.getElementById('conditions-billing-start').textContent = data.billingStart;
+    document.getElementById('conditions-term').textContent = data.contractTerm;
+    document.getElementById('conditions-test').textContent = data.testPeriod;
+    document.getElementById('conditions-billing').textContent = data.billingPeriod;
+
+    // Angebot sichtbar machen (für Print)
+    document.getElementById('offer-container').style.display = 'block';
+}
+
+function generateOfferPages(data) {
+    const container = document.getElementById('offer-pages-container');
+    container.innerHTML = '';
+
+    // Alle Tabellenzeilen erstellen und Gesamtsumme berechnen
     let total = 0;
+    const rows = [];
 
-    data.positions.forEach((position, index) => {
+    data.positions.forEach((position) => {
         const sum = position.isMain
             ? (position.quantity > 0 ? position.price : 0)
             : position.quantity * position.price;
@@ -271,7 +288,6 @@ function generateOffer(data) {
             if (items.length > 0) {
                 descHTML += '<ul>';
                 items.forEach(item => {
-                    // Ersetze {{minutes}} mit der tatsächlichen Minutenzahl
                     let itemText = item.trim();
                     if (position.isMain && itemText.includes('{{minutes}}')) {
                         itemText = itemText.replace('{{minutes}}', position.minutes.toLocaleString('de-DE'));
@@ -282,7 +298,6 @@ function generateOffer(data) {
             }
         }
 
-        // Minutenpaket-Hinweis für Hauptposition
         if (position.isMain) {
             descHTML += '<p style="font-size: 0.8em; margin-top: 8px; color: #888;">*Minutenpakete können jederzeit erweitert werden – vgl. <a href="https://www.sipgate.ai/preise" style="color: #888;">Paketpreise</a>.</p>';
         }
@@ -300,22 +315,155 @@ function generateOffer(data) {
         sumCell.textContent = formatCurrency(sum);
         row.appendChild(sumCell);
 
-        tableBody.appendChild(row);
+        rows.push(row);
     });
 
-    // Gesamtsumme
-    document.getElementById('total-amount').textContent = formatCurrency(total);
+    // Mess-Seite erstellen (off-screen) um Zeilenhöhen zu messen
+    const measurePage = document.createElement('div');
+    measurePage.className = 'page page-2';
+    measurePage.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden;width:210mm;height:297mm;padding:20mm;';
 
-    // Seite 3: Konditionen
-    document.getElementById('conditions-date').textContent = formattedDate;
-    document.getElementById('conditions-start').textContent = data.contractStart;
-    document.getElementById('conditions-billing-start').textContent = data.billingStart;
-    document.getElementById('conditions-term').textContent = data.contractTerm;
-    document.getElementById('conditions-test').textContent = data.testPeriod;
-    document.getElementById('conditions-billing').textContent = data.billingPeriod;
+    const measureHeader = document.createElement('div');
+    measureHeader.className = 'page-header';
+    measureHeader.innerHTML = '<h2>Unser Angebot</h2><div class="page-logo"><img class="logo-img" style="height:28px;"></div>';
+    measurePage.appendChild(measureHeader);
 
-    // Angebot sichtbar machen (für Print)
-    document.getElementById('offer-container').style.display = 'block';
+    const measureTable = document.createElement('table');
+    measureTable.className = 'offer-table';
+    const measureThead = document.createElement('thead');
+    measureThead.innerHTML = '<tr><th>Anzahl</th><th>Tarife</th><th>Einzelpreis</th><th>Summe</th></tr>';
+    measureTable.appendChild(measureThead);
+    const measureTbody = document.createElement('tbody');
+    measureTable.appendChild(measureTbody);
+    measurePage.appendChild(measureTable);
+
+    document.body.appendChild(measurePage);
+
+    // Maximale Tabellenhöhe pro Seite (in px)
+    // A4=297mm, Padding 20mm oben/unten, Seitenheader ~22mm, Footer-Bereich ~25mm
+    // Verfügbar: 297-20-20-22-25 = 210mm
+    const maxTableHeight = 210 * (96 / 25.4);
+    const tfootHeight = 70;
+
+    // Zeilen auf Seiten verteilen
+    const pages = [[]];
+    let currentPage = 0;
+
+    rows.forEach((row) => {
+        const clone = row.cloneNode(true);
+        measureTbody.appendChild(clone);
+
+        if (measureTable.offsetHeight > maxTableHeight && pages[currentPage].length > 0) {
+            measureTbody.removeChild(clone);
+            currentPage++;
+            pages[currentPage] = [];
+            measureTbody.innerHTML = '';
+            measureTbody.appendChild(clone);
+        }
+
+        pages[currentPage].push(row);
+    });
+
+    // Prüfen ob letzte Seite Platz für tfoot hat
+    let tfootFits = false;
+    while (!tfootFits && pages[pages.length - 1].length > 1) {
+        if (measureTable.offsetHeight + tfootHeight > maxTableHeight) {
+            const overflow = pages[pages.length - 1].pop();
+            pages.push([overflow]);
+            measureTbody.innerHTML = '';
+            measureTbody.appendChild(overflow.cloneNode(true));
+        } else {
+            tfootFits = true;
+        }
+    }
+
+    document.body.removeChild(measurePage);
+
+    // Seiten-DOM aufbauen
+    const footerHTML = '<div class="footer">' +
+        '<div class="footer-col">' +
+        '<p>sipgate GmbH, Gladbacher Str. 74, 40219 Düsseldorf</p>' +
+        '<p>HRB 38841 Düsseldorf GF: Tim Mois, Thilo Salmon</p>' +
+        '<p>USt ID: DE257948491, Finanzamt Düsseldorf</p>' +
+        '<p>Steuer-Nr.: 106/5754/7147</p>' +
+        '</div>' +
+        '<div class="footer-col">' +
+        '<p>Bank: Commerzbank Düsseldorf</p>' +
+        '<p>IBAN: DE10 3004 0000 0381 1488 00</p>' +
+        '<p>BIC: COBADEFFXXX</p>' +
+        '<p>Gläubiger-ID: DE73ZZZ00001393294</p>' +
+        '</div>' +
+        '<div class="footer-col">' +
+        '<p>Telefon: 0211-63555661</p>' +
+        '<p>www.sipgate.de</p>' +
+        '<p>Support: team@support.sipgate.de</p>' +
+        '</div>' +
+        '</div>';
+
+    const offerPageCount = pages.length;
+
+    pages.forEach((pageRows, index) => {
+        const isLast = index === pages.length - 1;
+        const pageNumber = 2 + index;
+
+        const page = document.createElement('div');
+        page.className = 'page page-2';
+
+        // Seitenheader
+        const header = document.createElement('div');
+        header.className = 'page-header';
+        header.innerHTML = '<h2>Unser Angebot</h2>' +
+            '<div class="page-logo">' +
+            '<img src="https://cdn.prod.website-files.com/678900e941dcd8f65b4519f8/678900e941dcd8f65b451a42_sipgate_logo_black.svg" alt="sipgate" class="logo-img">' +
+            '</div>';
+        page.appendChild(header);
+
+        // Tabelle
+        const table = document.createElement('table');
+        table.className = 'offer-table';
+
+        const thead = document.createElement('thead');
+        thead.innerHTML = '<tr><th>Anzahl</th><th>Tarife</th><th>Einzelpreis</th><th>Summe</th></tr>';
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        pageRows.forEach((row) => tbody.appendChild(row));
+        table.appendChild(tbody);
+
+        // Gesamtsumme nur auf letzter Seite
+        if (isLast) {
+            const tfoot = document.createElement('tfoot');
+            tfoot.innerHTML = '<tr class="total-row">' +
+                '<td colspan="3" class="total-label">Monatlich Netto (zzgl. MwSt.)</td>' +
+                '<td class="total-amount">' + formatCurrency(total) + '</td>' +
+                '</tr>';
+            table.appendChild(tfoot);
+        }
+
+        page.appendChild(table);
+
+        // Fortsetzungs-Hinweis auf Nicht-letzten Seiten
+        if (!isLast) {
+            const contHint = document.createElement('p');
+            contHint.className = 'continuation-hint';
+            contHint.textContent = 'Fortsetzung auf der nächsten Seite';
+            page.appendChild(contHint);
+        }
+
+        // Footer
+        page.insertAdjacentHTML('beforeend', footerHTML);
+
+        // Seitennummer
+        const pageNum = document.createElement('div');
+        pageNum.className = 'page-number';
+        pageNum.textContent = pageNumber;
+        page.appendChild(pageNum);
+
+        container.appendChild(page);
+    });
+
+    // Konditionen-Seitennummer aktualisieren
+    document.getElementById('conditions-page-number').textContent = 2 + offerPageCount;
 }
 
 function formatCurrency(amount) {
