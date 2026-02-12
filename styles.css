@@ -63,6 +63,12 @@ body {
     border-bottom: 3px solid #deff00;
 }
 
+.form-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .form-header h1 {
     font-size: 28px;
     color: #333;
@@ -72,6 +78,37 @@ body {
 .form-header p {
     color: #666;
     font-size: 16px;
+}
+
+/* Language Selector */
+.lang-selector {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.lang-btn {
+    padding: 6px 14px;
+    border: 2px solid #e0e0e0;
+    background: white;
+    color: #666;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.lang-btn:hover {
+    border-color: #deff00;
+    color: #333;
+}
+
+.lang-btn.active {
+    background: #deff00;
+    border-color: #deff00;
+    color: #000;
 }
 
 /* Form Sections */

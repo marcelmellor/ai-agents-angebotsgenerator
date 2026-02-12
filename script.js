@@ -11,6 +11,30 @@ function generateContractNumber() {
 
 // Datum auf heute setzen beim Laden
 window.addEventListener('DOMContentLoaded', () => {
+    // i18n initialisieren
+    applyTranslations();
+    updatePositionTranslations();
+
+    // Sprachumschalter Event-Handler
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            setLanguage(btn.dataset.lang);
+        });
+    });
+
+    // Gespeicherte Sprachpräferenz wiederherstellen
+    const savedLang = localStorage.getItem('appLang');
+    if (savedLang && savedLang !== 'de') {
+        const btn = document.querySelector(`.lang-btn[data-lang="${savedLang}"]`);
+        if (btn) {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        setLanguage(savedLang);
+    }
+
     const dateInput = document.getElementById('date');
     const today = new Date().toISOString().split('T')[0];
     dateInput.value = today;
@@ -44,25 +68,25 @@ function addNewPosition() {
     positionDiv.innerHTML = `
         <div class="position-header">
             <div class="form-group position-name-group">
-                <label>Bezeichnung *</label>
-                <input type="text" class="position-name-input" placeholder="z.B. Zusätzliche Leistung" required>
+                <label>${t('label.positionName')}</label>
+                <input type="text" class="position-name-input" placeholder="${t('placeholder.positionName')}" required>
             </div>
-            <button type="button" class="btn-remove-position" onclick="removePosition(this)" title="Position entfernen">&times;</button>
+            <button type="button" class="btn-remove-position" onclick="removePosition(this)" title="${t('btn.removePosition')}">&times;</button>
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Anzahl *</label>
+                <label>${t('label.quantity')}</label>
                 <input type="number" class="position-quantity" value="1" min="0" required>
             </div>
             <div class="form-group">
-                <label>Einzelpreis (€) *</label>
+                <label>${t('label.unitPrice')}</label>
                 <input type="number" class="position-price" value="0" step="0.01" min="0" required>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group full-width">
-                <label>Beschreibung (optional, Punkte mit | trennen)</label>
-                <input type="text" class="position-description-input" placeholder="z.B. Feature 1|Feature 2|Feature 3">
+                <label>${t('label.positionDesc')}</label>
+                <input type="text" class="position-description-input" placeholder="${t('placeholder.positionDesc')}">
             </div>
         </div>
         <input type="hidden" class="position-name" value="">
@@ -138,7 +162,7 @@ function collectPositions() {
 function fillExampleData() {
     // Kundeninformationen
     document.getElementById('company').value = 'Musterfirma GmbH';
-    document.getElementById('salutation').value = 'Herr';
+    document.getElementById('salutation').value = 'mr';
     document.getElementById('contact').value = 'Max Mustermann';
     document.getElementById('street').value = 'Beispielstraße 123';
     document.getElementById('plz').value = '40219';
@@ -167,11 +191,11 @@ function fillExampleData() {
     }
 
     // Vertragsbedingungen
-    document.getElementById('contract-start').value = 'mit Unterschrift';
-    document.getElementById('billing-start').value = 'nach Ablauf des Testzeitraums';
-    document.getElementById('contract-term').value = 'zwölf (12) Monate – abweichend von den AGB läuft der Vertrag für ein (1) Jahr und verlängert sich automatisch um ein (1) weiteres Jahr, wenn er nicht mit einer Frist von 3 Monaten zum Ende des Vertragszeitraums in Textform gekündigt wurde.';
-    document.getElementById('test-period').value = 'Das Produkt AI Agent kann innerhalb der ersten vier (4) Wochen ab Vertragsbeginn kostenfrei getestet werden. Während dieses Testzeitraums ist der Kunde berechtigt, ohne Angabe von Gründen vom Vertrag zurückzutreten. Der Abrechnungszeitraum beginnt erst nach Ablauf des Testzeitraums.';
-    document.getElementById('billing-period').value = 'Monatliche Abrechnung in Höhe des unter monatlich Netto genannten Betrages.';
+    document.getElementById('contract-start').value = t('default.contractStart');
+    document.getElementById('billing-start').value = t('default.billingStart');
+    document.getElementById('contract-term').value = t('default.contractTerm');
+    document.getElementById('test-period').value = t('default.testPeriod');
+    document.getElementById('billing-period').value = t('default.billingPeriod');
 
     // Angebot sofort generieren
     const form = document.getElementById('offer-form');
@@ -226,9 +250,12 @@ document.getElementById('offer-form').addEventListener('submit', async function(
 });
 
 function generateOffer(data) {
+    // Übersetzungen auf statische Elemente anwenden
+    applyTranslations();
+
     // Datum formatieren
     const dateObj = new Date(data.date);
-    const formattedDate = dateObj.toLocaleDateString('de-DE', {
+    const formattedDate = dateObj.toLocaleDateString(getLocale(), {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
@@ -238,16 +265,22 @@ function generateOffer(data) {
     document.getElementById('output-company').textContent = data.company;
     document.getElementById('output-contact').textContent = data.contact;
     document.getElementById('output-street').textContent = data.street;
-    document.getElementById('output-salutation').textContent = `Sehr geehrte${data.salutation === 'Frau' ? '' : 'r'} ${data.salutation} ${data.contact},`;
     document.getElementById('output-plz-city').textContent = `${data.plz} ${data.city}`;
     document.getElementById('output-location-date').textContent = `${data.location}, ${formattedDate}`;
     document.getElementById('output-contract-number').textContent = data.contractNumber;
+
+    // Begrüßung und Intro-Text
+    const greetingKey = data.salutation === 'ms' ? 'cover.greeting.ms' : 'cover.greeting.mr';
+    document.getElementById('output-salutation').textContent = t(greetingKey, { name: data.contact });
+    document.getElementById('output-intro').textContent = t('cover.introText');
+    document.getElementById('output-closing').textContent = t('cover.closingText');
+    document.getElementById('output-signature').textContent = t('cover.teamSignature');
 
     // Seite 2+: Angebot (dynamisch, mehrseitig)
     generateOfferPages(data);
 
     // Seite 3: Konditionen
-    document.getElementById('conditions-date').textContent = formattedDate;
+    document.getElementById('conditions-intro').innerHTML = t('conditions.intro', { date: formattedDate });
     document.getElementById('conditions-start').textContent = data.contractStart;
     document.getElementById('conditions-billing-start').textContent = data.billingStart;
     document.getElementById('conditions-term').textContent = data.contractTerm;
@@ -290,7 +323,7 @@ function generateOfferPages(data) {
                 items.forEach(item => {
                     let itemText = item.trim();
                     if (position.isMain && itemText.includes('{{minutes}}')) {
-                        itemText = itemText.replace('{{minutes}}', position.minutes.toLocaleString('de-DE'));
+                        itemText = itemText.replace('{{minutes}}', position.minutes.toLocaleString(getLocale()));
                     }
                     descHTML += `<li>${escapeHtml(itemText)}</li>`;
                 });
@@ -299,7 +332,7 @@ function generateOfferPages(data) {
         }
 
         if (position.isMain) {
-            descHTML += '<p style="font-size: 0.8em; margin-top: 8px; color: #888;">*Minutenpakete können jederzeit erweitert werden – vgl. <a href="https://www.sipgate.ai/preise" style="color: #888;">Paketpreise</a>.</p>';
+            descHTML += `<p style="font-size: 0.8em; margin-top: 8px; color: #888;">${t('offer.minuteFootnote')}</p>`;
         }
 
         descCell.innerHTML = descHTML;
@@ -325,13 +358,13 @@ function generateOfferPages(data) {
 
     const measureHeader = document.createElement('div');
     measureHeader.className = 'page-header';
-    measureHeader.innerHTML = '<h2>Unser Angebot</h2><div class="page-logo"><img class="logo-img" style="height:28px;"></div>';
+    measureHeader.innerHTML = `<h2>${t('offer.pageTitle')}</h2><div class="page-logo"><img class="logo-img" style="height:28px;"></div>`;
     measurePage.appendChild(measureHeader);
 
     const measureTable = document.createElement('table');
     measureTable.className = 'offer-table';
     const measureThead = document.createElement('thead');
-    measureThead.innerHTML = '<tr><th>Anzahl</th><th>Tarife</th><th>Einzelpreis</th><th>Summe</th></tr>';
+    measureThead.innerHTML = `<tr><th>${t('offer.colQuantity')}</th><th>${t('offer.colTariffs')}</th><th>${t('offer.colUnitPrice')}</th><th>${t('offer.colSum')}</th></tr>`;
     measureTable.appendChild(measureThead);
     const measureTbody = document.createElement('tbody');
     measureTable.appendChild(measureTbody);
@@ -412,7 +445,7 @@ function generateOfferPages(data) {
         // Seitenheader
         const header = document.createElement('div');
         header.className = 'page-header';
-        header.innerHTML = '<h2>Unser Angebot</h2>' +
+        header.innerHTML = `<h2>${t('offer.pageTitle')}</h2>` +
             '<div class="page-logo">' +
             '<img src="https://cdn.prod.website-files.com/678900e941dcd8f65b4519f8/678900e941dcd8f65b451a42_sipgate_logo_black.svg" alt="sipgate" class="logo-img">' +
             '</div>';
@@ -423,7 +456,7 @@ function generateOfferPages(data) {
         table.className = 'offer-table';
 
         const thead = document.createElement('thead');
-        thead.innerHTML = '<tr><th>Anzahl</th><th>Tarife</th><th>Einzelpreis</th><th>Summe</th></tr>';
+        thead.innerHTML = `<tr><th>${t('offer.colQuantity')}</th><th>${t('offer.colTariffs')}</th><th>${t('offer.colUnitPrice')}</th><th>${t('offer.colSum')}</th></tr>`;
         table.appendChild(thead);
 
         const tbody = document.createElement('tbody');
@@ -434,7 +467,7 @@ function generateOfferPages(data) {
         if (isLast) {
             const tfoot = document.createElement('tfoot');
             tfoot.innerHTML = '<tr class="total-row">' +
-                '<td colspan="3" class="total-label">Monatlich Netto (zzgl. MwSt.)</td>' +
+                `<td colspan="3" class="total-label">${t('offer.totalLabel')}</td>` +
                 '<td class="total-amount">' + formatCurrency(total) + '</td>' +
                 '</tr>';
             table.appendChild(tfoot);
@@ -446,7 +479,7 @@ function generateOfferPages(data) {
         if (!isLast) {
             const contHint = document.createElement('p');
             contHint.className = 'continuation-hint';
-            contHint.textContent = 'Fortsetzung auf der nächsten Seite';
+            contHint.textContent = t('offer.continuation');
             page.appendChild(contHint);
         }
 
@@ -467,7 +500,7 @@ function generateOfferPages(data) {
 }
 
 function formatCurrency(amount) {
-    return amount.toLocaleString('de-DE', {
+    return amount.toLocaleString(getLocale(), {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     }) + ' €';
@@ -494,7 +527,7 @@ function showPreview() {
 // Vorschau-Button hinzufügen (optional, für Entwicklung)
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     const previewBtn = document.createElement('button');
-    previewBtn.textContent = 'Vorschau umschalten (Dev)';
+    previewBtn.textContent = t('btn.preview');
     previewBtn.className = 'btn-primary';
     previewBtn.style.marginLeft = '10px';
     previewBtn.type = 'button';

@@ -10,42 +10,48 @@
     <!-- Eingabeformular -->
     <div id="form-container">
         <div class="form-header">
-            <h1>sipgate AI Agents Angebotsgenerator</h1>
-            <p>Füllen Sie die Felder aus, um ein Angebot zu generieren</p>
+            <div class="form-header-top">
+                <h1 data-i18n="form.title">sipgate AI Agents Angebotsgenerator</h1>
+                <div class="lang-selector">
+                    <button type="button" class="lang-btn active" data-lang="de">DE</button>
+                    <button type="button" class="lang-btn" data-lang="en">EN</button>
+                </div>
+            </div>
+            <p data-i18n="form.subtitle">Füllen Sie die Felder aus, um ein Angebot zu generieren</p>
         </div>
 
         <form id="offer-form">
             <!-- Kundeninformationen -->
             <section class="form-section">
-                <h2>Kundeninformationen</h2>
+                <h2 data-i18n="section.customerInfo">Kundeninformationen</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="company">Firmenname *</label>
+                        <label for="company" data-i18n="label.company">Firmenname *</label>
                         <input type="text" id="company" required>
                     </div>
                     <div class="form-group">
-                        <label for="salutation">Anrede *</label>
+                        <label for="salutation" data-i18n="label.salutation">Anrede *</label>
                         <select id="salutation" required>
-                            <option value="Herr">Herr</option>
-                            <option value="Frau">Frau</option>
+                            <option value="mr" data-i18n="salutation.mr">Herr</option>
+                            <option value="ms" data-i18n="salutation.ms">Frau</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="contact">Ansprechpartner *</label>
+                        <label for="contact" data-i18n="label.contact">Ansprechpartner *</label>
                         <input type="text" id="contact" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="street">Straße *</label>
+                        <label for="street" data-i18n="label.street">Straße *</label>
                         <input type="text" id="street" required>
                     </div>
                     <div class="form-group">
-                        <label for="plz">PLZ *</label>
+                        <label for="plz" data-i18n="label.plz">PLZ *</label>
                         <input type="text" id="plz" required>
                     </div>
                     <div class="form-group">
-                        <label for="city">Ort *</label>
+                        <label for="city" data-i18n="label.city">Ort *</label>
                         <input type="text" id="city" required>
                     </div>
                 </div>
@@ -53,40 +59,40 @@
 
             <!-- Vertragsinformationen -->
             <section class="form-section">
-                <h2>Vertragsinformationen</h2>
+                <h2 data-i18n="section.contractInfo">Vertragsinformationen</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="location">Ort *</label>
+                        <label for="location" data-i18n="label.location">Ort *</label>
                         <input type="text" id="location" value="Düsseldorf" required>
                     </div>
                     <div class="form-group">
-                        <label for="date">Datum *</label>
+                        <label for="date" data-i18n="label.date">Datum *</label>
                         <input type="date" id="date" required>
                     </div>
                     <div class="form-group">
-                        <label for="contract-number">Vertragsnummer *</label>
-                        <input type="text" id="contract-number" placeholder="Wird automatisch generiert" required>
+                        <label for="contract-number" data-i18n="label.contractNumber">Vertragsnummer *</label>
+                        <input type="text" id="contract-number" data-i18n-placeholder="placeholder.contractNumber" placeholder="Wird automatisch generiert" required>
                     </div>
                 </div>
             </section>
 
             <!-- Angebotspositionen -->
             <section class="form-section">
-                <h2>Angebotspositionen</h2>
+                <h2 data-i18n="section.positions">Angebotspositionen</h2>
 
                 <div id="positions-container">
                     <!-- Position 1: AI Agents Tarif (Hauptposition) -->
                     <div class="position-group" data-position-id="1" data-is-main="true">
                         <div class="position-header">
-                            <h3>AI Agents Enterprise Tarif</h3>
+                            <h3 data-i18n="position.aiAgents.name">AI Agents Enterprise Tarif</h3>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Anzahl Minutenkontingent *</label>
+                                <label data-i18n="label.minuteQuantity">Anzahl Minutenkontingent *</label>
                                 <input type="number" class="position-quantity" value="2500" min="0" required>
                             </div>
                             <div class="form-group">
-                                <label>Einzelpreis (€) *</label>
+                                <label data-i18n="label.unitPrice">Einzelpreis (€) *</label>
                                 <input type="number" class="position-price" value="449.95" step="0.01" min="0" required>
                             </div>
                         </div>
@@ -97,16 +103,16 @@
                     <!-- Position 2: Unterstützte Einrichtung -->
                     <div class="position-group" data-position-id="2">
                         <div class="position-header">
-                            <h3>Unterstützte Einrichtung und Optimierung</h3>
-                            <button type="button" class="btn-remove-position" onclick="removePosition(this)" title="Position entfernen">&times;</button>
+                            <h3 data-i18n="position.setup.name">Unterstützte Einrichtung und Optimierung</h3>
+                            <button type="button" class="btn-remove-position" onclick="removePosition(this)" data-i18n-title="btn.removePosition" title="Position entfernen">&times;</button>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Anzahl *</label>
+                                <label data-i18n="label.quantity">Anzahl *</label>
                                 <input type="number" class="position-quantity" value="1" min="0" required>
                             </div>
                             <div class="form-group">
-                                <label>Einzelpreis (€) *</label>
+                                <label data-i18n="label.unitPrice">Einzelpreis (€) *</label>
                                 <input type="number" class="position-price" value="0" step="0.01" min="0" required>
                             </div>
                         </div>
@@ -117,16 +123,16 @@
                     <!-- Position 3: Rufnummernblock -->
                     <div class="position-group" data-position-id="3">
                         <div class="position-header">
-                            <h3>neuer 3er Rufnummernblock</h3>
-                            <button type="button" class="btn-remove-position" onclick="removePosition(this)" title="Position entfernen">&times;</button>
+                            <h3 data-i18n="position.phoneBlock.title">neuer 3er Rufnummernblock</h3>
+                            <button type="button" class="btn-remove-position" onclick="removePosition(this)" data-i18n-title="btn.removePosition" title="Position entfernen">&times;</button>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Anzahl *</label>
+                                <label data-i18n="label.quantity">Anzahl *</label>
                                 <input type="number" class="position-quantity" value="1" min="0" required>
                             </div>
                             <div class="form-group">
-                                <label>Einzelpreis (€) *</label>
+                                <label data-i18n="label.unitPrice">Einzelpreis (€) *</label>
                                 <input type="number" class="position-price" value="4.95" step="0.01" min="0" required>
                             </div>
                         </div>
@@ -137,16 +143,16 @@
                     <!-- Position 4: Portierung -->
                     <div class="position-group" data-position-id="4">
                         <div class="position-header">
-                            <h3>Portierung bestehender Rufnummern</h3>
-                            <button type="button" class="btn-remove-position" onclick="removePosition(this)" title="Position entfernen">&times;</button>
+                            <h3 data-i18n="position.porting.title">Portierung bestehender Rufnummern</h3>
+                            <button type="button" class="btn-remove-position" onclick="removePosition(this)" data-i18n-title="btn.removePosition" title="Position entfernen">&times;</button>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Anzahl *</label>
+                                <label data-i18n="label.quantity">Anzahl *</label>
                                 <input type="number" class="position-quantity" value="1" min="0" required>
                             </div>
                             <div class="form-group">
-                                <label>Einzelpreis (€) *</label>
+                                <label data-i18n="label.unitPrice">Einzelpreis (€) *</label>
                                 <input type="number" class="position-price" value="0" step="0.01" min="0" required>
                             </div>
                         </div>
@@ -155,45 +161,45 @@
                     </div>
                 </div>
 
-                <button type="button" class="btn-add-position" id="add-position-btn">+ Neue Position hinzufügen</button>
+                <button type="button" class="btn-add-position" id="add-position-btn" data-i18n="btn.addPosition">+ Neue Position hinzufügen</button>
             </section>
 
             <!-- Vertragsbedingungen -->
             <section class="form-section">
-                <h2>Vertragsbedingungen</h2>
+                <h2 data-i18n="section.conditions">Vertragsbedingungen</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="contract-start">Vertragsbeginn *</label>
+                        <label for="contract-start" data-i18n="label.contractStart">Vertragsbeginn *</label>
                         <input type="text" id="contract-start" value="mit Unterschrift" required>
                     </div>
                     <div class="form-group">
-                        <label for="billing-start">Abrechnungsbeginn *</label>
+                        <label for="billing-start" data-i18n="label.billingStart">Abrechnungsbeginn *</label>
                         <input type="text" id="billing-start" value="nach Ablauf des Testzeitraums" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group full-width">
-                        <label for="contract-term">Vertragslaufzeit *</label>
+                        <label for="contract-term" data-i18n="label.contractTerm">Vertragslaufzeit *</label>
                         <textarea id="contract-term" rows="3" required>zwölf (12) Monate – abweichend von den AGB läuft der Vertrag für ein (1) Jahr und verlängert sich automatisch um ein (1) weiteres Jahr, wenn er nicht mit einer Frist von 3 Monaten zum Ende des Vertragszeitraums in Textform gekündigt wurde.</textarea>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group full-width">
-                        <label for="test-period">Testzeitraum *</label>
+                        <label for="test-period" data-i18n="label.testPeriod">Testzeitraum *</label>
                         <textarea id="test-period" rows="3" required>Das Produkt AI Agent kann innerhalb der ersten vier (4) Wochen ab Vertragsbeginn kostenfrei getestet werden. Während dieses Testzeitraums ist der Kunde berechtigt, ohne Angabe von Gründen vom Vertrag zurückzutreten. Der Abrechnungszeitraum beginnt erst nach Ablauf des Testzeitraums.</textarea>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group full-width">
-                        <label for="billing-period">Abrechnungszeitraum *</label>
+                        <label for="billing-period" data-i18n="label.billingPeriod">Abrechnungszeitraum *</label>
                         <textarea id="billing-period" rows="2" required>Monatliche Abrechnung in Höhe des unter monatlich Netto genannten Betrages.</textarea>
                     </div>
                 </div>
             </section>
 
             <div class="form-actions">
-                <button type="button" class="btn-secondary" id="fill-example-btn">Beispielangebot generieren</button>
-                <button type="submit" class="btn-primary">Angebot generieren</button>
+                <button type="button" class="btn-secondary" id="fill-example-btn" data-i18n="btn.generateExample">Beispielangebot generieren</button>
+                <button type="submit" class="btn-primary" data-i18n="btn.generate">Angebot generieren</button>
             </div>
         </form>
     </div>
@@ -210,10 +216,10 @@
                     </div>
                 </div>
                 <h1 class="main-heading">
-                    Stärken Sie Ihren<br>
-                    <strong>Kundenservice.</strong>
+                    <span data-i18n="cover.heading1">Stärken Sie Ihren</span><br>
+                    <strong data-i18n="cover.heading2">Kundenservice.</strong>
                 </h1>
-                <p class="subheading">
+                <p class="subheading" data-i18n-html="cover.subheading">
                     Wir freuen uns, Ihnen den folgenden <strong>Enterprise Vertrag</strong> zu unterbreiten.
                 </p>
             </div>
@@ -230,16 +236,16 @@
                     <div class="address-right">
                         <div id="output-location-date"></div>
                         <div>&nbsp;</div>
-                        <div><strong>Ihr Vertrag</strong></div>
+                        <div><strong data-i18n="cover.yourContract">Ihr Vertrag</strong></div>
                         <div id="output-contract-number"></div>
                     </div>
                 </div>
 
-                <div class="intro-text">
-                    <p id="output-salutation">Sehr geehrter Herr Mustermann,</p>
-                    <p>vielen Dank für Ihr Interesse an unseren sipgate AI Agents. In den folgenden Abschnitten finden Sie eine detaillierte Übersicht über unser Angebot sowie Informationen zu Preisen und weiteren wichtigen Informationen.</p>
-                    <p>Wir freuen uns auf eine erfolgreiche Zusammenarbeit!</p>
-                    <p>Ihr Team von sipgate</p>
+                <div class="intro-text" id="intro-text-container">
+                    <p id="output-salutation"></p>
+                    <p id="output-intro"></p>
+                    <p id="output-closing"></p>
+                    <p id="output-signature"></p>
                 </div>
             </div>
 
@@ -272,29 +278,29 @@
         <!-- Seite 3: Konditionen -->
         <div class="page page-3">
             <div class="page-header">
-                <h2>Konditionen</h2>
+                <h2 data-i18n="conditions.title">Konditionen</h2>
                 <div class="page-logo">
                     <img src="https://cdn.prod.website-files.com/678900e941dcd8f65b4519f8/678900e941dcd8f65b451a42_sipgate_logo_black.svg" alt="sipgate" class="logo-img">
                 </div>
             </div>
 
             <div class="conditions-box">
-                <p class="conditions-intro">
+                <p class="conditions-intro" id="conditions-intro">
                     Hiermit beauftragt <strong>der Kunde</strong> die sipgate GmbH mit der Erbringung der unter Grundtarif genannten Leistungen gemäß des Angebots vom <strong id="conditions-date">Datum</strong>.
                 </p>
 
-                <p><strong>Vertragsbeginn:</strong> <span id="conditions-start"></span></p>
+                <p><strong data-i18n="conditions.contractStart">Vertragsbeginn:</strong> <span id="conditions-start"></span></p>
 
-                <p><strong>Vertragslaufzeit:</strong> <span id="conditions-term"></span></p>
+                <p><strong data-i18n="conditions.contractTerm">Vertragslaufzeit:</strong> <span id="conditions-term"></span></p>
 
-                <p><strong>Testzeitraum:</strong> <span id="conditions-test"></span></p>
+                <p><strong data-i18n="conditions.testPeriod">Testzeitraum:</strong> <span id="conditions-test"></span></p>
 
-                <p><strong>Abrechnungsbeginn:</strong> <span id="conditions-billing-start"></span></p>
+                <p><strong data-i18n="conditions.billingStart">Abrechnungsbeginn:</strong> <span id="conditions-billing-start"></span></p>
 
-                <p><strong>Abrechnungszeitraum:</strong> <span id="conditions-billing"></span></p>
+                <p><strong data-i18n="conditions.billingPeriod">Abrechnungszeitraum:</strong> <span id="conditions-billing"></span></p>
 
                 <div class="signature-line">
-                    <span>Datum, Unterschrift/Stempel Kunde</span>
+                    <span data-i18n="conditions.signatureLine">Datum, Unterschrift/Stempel Kunde</span>
                 </div>
             </div>
 
@@ -322,6 +328,7 @@
         </div>
     </div>
 
+    <script src="i18n.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
