@@ -89,6 +89,19 @@ const translations = {
         "conditions.billingPeriod": "Abrechnungszeitraum:",
         "conditions.signatureLine": "Datum, Unterschrift/Stempel Kunde",
 
+        // Optionen
+        "section.options": "Optionen",
+        "label.outboundAgent": "Outbound Agent",
+        "hint.outboundAgent": "Aktiviert Verbindungspreise für ausgehende Telefonie im Angebot",
+
+        // Verbindungspreise (PDF)
+        "usageRates.title": "Verbindungspreise (minutengenau, zzgl. MwSt.):",
+        "usageRates.titleInline": "Preis pro AI Agent-Minute, wenn nicht mit Kontingent abgegolten",
+        "usageRates.overage": "Preis pro AI Agent-Minute, wenn nicht mit Kontingent abgegolten",
+        "usageRates.linkText": "Alle Preise unter: <a href=\"https://www.sipgate.de/preise\">www.sipgate.de/preise</a>",
+        "outbound.festnetz": "Ausgehende Telefonie DE Festnetz",
+        "outbound.mobilfunk": "Ausgehende Telefonie DE Mobilfunk",
+
         // Positionsnamen (vorkonfiguriert)
         "position.aiAgents.name": "AI Agents Enterprise Tarif",
         "position.aiAgents.desc": "{{minutes}} AI-Minuten inkludiert*|Natürliche Gesprächsführung|Mehrsprachigkeit|Auswahl an natürlich klingenden AI-Stimmen (20+ Stimmen)|Verzweigte Gesprächsleitfäden|Anrufszenarien (Playbooks)|Kontextwissen|Outbound-Anrufe|CRM/ERP-Integration",
@@ -189,6 +202,19 @@ const translations = {
         "conditions.billingStart": "Billing Start:",
         "conditions.billingPeriod": "Billing Period:",
         "conditions.signatureLine": "Date, Signature/Stamp Customer",
+
+        // Options
+        "section.options": "Options",
+        "label.outboundAgent": "Outbound Agent",
+        "hint.outboundAgent": "Enables outbound telephony rates in the offer",
+
+        // Usage rates (PDF)
+        "usageRates.title": "Connection rates (per minute, excl. VAT):",
+        "usageRates.titleInline": "Price per AI Agent minute, if not covered by allowance",
+        "usageRates.overage": "Price per AI Agent minute, if not covered by allowance",
+        "usageRates.linkText": "All rates at: <a href=\"https://www.sipgate.de/preise\">www.sipgate.de/preise</a>",
+        "outbound.festnetz": "Outbound telephony DE landline",
+        "outbound.mobilfunk": "Outbound telephony DE mobile",
 
         // Position names (pre-configured)
         "position.aiAgents.name": "AI Agents Enterprise Plan",

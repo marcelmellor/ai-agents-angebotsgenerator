@@ -224,6 +224,9 @@ document.getElementById('offer-form').addEventListener('submit', async function(
         // Angebotspositionen - dynamisch sammeln
         positions: collectPositions(),
 
+        // Optionen
+        outboundAgent: document.getElementById('outbound-agent').checked,
+
         // Vertragsbedingungen
         contractStart: document.getElementById('contract-start').value,
         billingStart: document.getElementById('billing-start').value,
@@ -351,6 +354,29 @@ function generateOfferPages(data) {
         rows.push(row);
     });
 
+    // Verbindungspreise-HTML vorbereiten (wird unterhalb der Tabelle auf der letzten Seite eingefügt)
+    let ratesHTML;
+    if (data.outboundAgent) {
+        ratesHTML = `<p><strong>${t('usageRates.title')}</strong></p>` +
+            '<ul>' +
+            `<li>${t('usageRates.overage')}: 0,18 €</li>` +
+            `<li>${t('outbound.festnetz')}: 0,084 €</li>` +
+            `<li>${t('outbound.mobilfunk')}: 0,1084 €</li>` +
+            '</ul>' +
+            `<p>${t('usageRates.linkText')}</p>`;
+    } else {
+        ratesHTML = `<p>${t('usageRates.titleInline')}: 0,18 €</p>`;
+    }
+
+    // Verbindungspreise-Höhe messen (für Seitenumbruch-Berechnung)
+    const measureRates = document.createElement('div');
+    measureRates.className = 'usage-rates-section';
+    measureRates.innerHTML = ratesHTML;
+    measureRates.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden;width:170mm;';
+    document.body.appendChild(measureRates);
+    const ratesHeight = measureRates.offsetHeight + 10;
+    document.body.removeChild(measureRates);
+
     // Mess-Seite erstellen (off-screen) um Zeilenhöhen zu messen
     const measurePage = document.createElement('div');
     measurePage.className = 'page page-2';
@@ -376,7 +402,7 @@ function generateOfferPages(data) {
     // A4=297mm, Padding 20mm oben/unten, Seitenheader ~22mm, Footer-Bereich ~25mm
     // Verfügbar: 297-20-20-22-25 = 210mm
     const maxTableHeight = 210 * (96 / 25.4);
-    const tfootHeight = 70;
+    const tfootHeight = 70 + ratesHeight;
 
     // Zeilen auf Seiten verteilen
     const pages = [[]];
@@ -474,6 +500,14 @@ function generateOfferPages(data) {
         }
 
         page.appendChild(table);
+
+        // Verbindungspreise auf letzter Angebotsseite
+        if (isLast) {
+            const ratesDiv = document.createElement('div');
+            ratesDiv.className = 'usage-rates-section';
+            ratesDiv.innerHTML = ratesHTML;
+            page.appendChild(ratesDiv);
+        }
 
         // Fortsetzungs-Hinweis auf Nicht-letzten Seiten
         if (!isLast) {
